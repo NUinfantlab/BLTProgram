@@ -23,13 +23,6 @@ function Test_Type_Input_Window(name, ...
     labelH = floor((height - 70 - 13 * 5)/13);
     uiFontSize = 16;
 
-    MaxTimeOn = 60; % (seconds) 
-    LookAway = 2; % (seconds)
-    MaxSumOfHabTrial = 9; % Max # of Habituation Trial
-    MinSumOfHabTrial = 6; % Max # of Habituation Trial
-    MinTimeOn = 2; % (seconds)
-    StudyName = 'Block';
-
     eventInputs={};
 
     i=1;

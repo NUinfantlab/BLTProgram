@@ -36,8 +36,8 @@ while (~exitHab)
     else
         KAPPA = Compute_Kappa(observerTime);
         AGR = Compute_Agr(observerTime);
-        timeOn = sum(observerTime(1,:));
-        timeOn2 = sum(observerTime(:,1));
+        timeOn = min(sum(observerTime(1,:)), MaxTimeOn);
+        timeOn2 = min(sum(observerTime(:,1)), MaxTimeOn);
         SIM = Compute_Similarity(timeOn, timeOn2);
         timeOff = sum(observerTime(2,:));
         timeOff2 = sum(observerTime(:,2));
