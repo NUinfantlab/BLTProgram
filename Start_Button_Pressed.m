@@ -4,12 +4,12 @@ function Start_Button_Pressed(nameInput, ...
     conditionInput, numLabels, maxTimeOnInput, ...
     minTimeOnInput, lookAwayInput, minHabTrialInput, maxHabTrialInput, ...
     generateNewGUI, ageInput)
-
-if nargin < 18 || isempty(generateNewGUI)
+% GenerateNewGUI and age are optional
+if nargin < 17 || isempty(generateNewGUI)
     generateNewGUI = 0;
 end
-if (nargin < 19)
-    age = ' ';
+if (nargin < 18)
+    age = '';
 else
     age = get(ageInput, 'String');
 end
