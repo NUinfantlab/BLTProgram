@@ -79,5 +79,3 @@ Draw_Hab_Message and Draw_Test_Message create the full-screen prompts for the Ha
 Default_Exp_Parameters sets up some global variables used in Draw_Hab_Message. It isn't directly referenced in code, but the global variables are loaded by the Draw files.
 
 SoundAlert makes a tone upon trial and stage completion.
-
-13_martin appears to be an unused Gui file.
