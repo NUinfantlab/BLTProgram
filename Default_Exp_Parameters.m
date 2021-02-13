@@ -10,3 +10,5 @@ MinSumOfHabTrial = 6; % Max # of Habituation Trial
 MinTimeOn = 2; % (seconds)
 
 StudyName = 'Study Name';
+
+FixedHabituationTimeDefault = 20;

@@ -3,8 +3,8 @@ function Start_Button_Pressed(nameInput, ...
     experimenterInput, coder1Input, coder2Input, studyNameInput, ...
     conditionInput, numLabels, maxTimeOnInput, ...
     minTimeOnInput, lookAwayInput, minHabTrialInput, maxHabTrialInput, ...
-    generateNewGUI, ageInput)
-% GenerateNewGUI and age are optional
+    generateNewGUI, ageInput, fixedHabituationInput, fixedHabituationTimeInput)
+% fixedHabituation (handled later), GenerateNewGUI and age are optional
 if nargin < 17 || isempty(generateNewGUI)
     generateNewGUI = 0;
 end
@@ -49,6 +49,15 @@ else
     [minSumOfHabTrial, minHabTrialValid] = str2num(minHabTrial);
     [maxSumOfHabTrial, maxHabTrialValid] = str2num(maxHabTrial);
     [numLabels, numLabelsValid] = str2num(numLabels);
+    
+    fixedHabituation = 0;
+    fixedHabituationTime = 0;
+    if (nargin >= 19)
+        fixedHabituation = get(fixedHabituationInput, 'Value');
+        if (fixedHabituation)
+            [fixedHabituationTime, fixedHabituationTimeValid] = str2num(get(fixedHabituationTimeInput, 'String'));
+        end
+    end
 
     if (~maxTimeOnValid)
         uiwait(msgbox('The field "Max Time On" must be a number. ','Warning','modal'));
@@ -64,12 +73,17 @@ else
         uiwait(msgbox('The field "Max # of Hab. Trial" must not be smaller than "Max # of Hab. Trial". ','Warning','modal'))
     elseif (~numLabelsValid || numLabels <= 0 || numLabels > 20)
         uiwait(msgbox('The field "# of TestEvent Labels (*)" must be a number between 1 and 20 (inclusive)','Warning','modal'))
+    elseif (fixedHabituation && nargin < 18)
+        uiwait(msgbox('Fixed Habituation requires a Fixed Habituation Time','Warning','modal'))
+    elseif (fixedHabituation && ~fixedHabituationTimeValid)
+        uiwait(msgbox('Fixed Habituation Time must be a positive number','Warning','modal'))
     else
         % save experiment settings
         if (generateNewGUI == 1)
             Generate_New_GUI_File(num2str(maxTimeOn), num2str(lookAway),...
                 num2str(maxSumOfHabTrial), num2str(minTimeOn), ...
-                num2str(minSumOfHabTrial), num2str(studyName));
+                num2str(minSumOfHabTrial), num2str(studyName), ...
+                num2str(fixedHabituation), num2str(fixedHabituationTime));
         end
 
         clear maxTimeOnValid minTimeOnValid lookAwayValid minHabTrialValid maxHabTrialValid;
@@ -81,7 +95,8 @@ else
           experimenter, coder1, coder2, studyName, ...
           condition, numLabels, maxTimeOn, ...
           minTimeOn, lookAway, minHabTrial, maxHabTrial, age, ...
-          maxSumOfHabTrial, minSumOfHabTrial)
+          maxSumOfHabTrial, minSumOfHabTrial, fixedHabituation, ...
+          fixedHabituationTime)
     end
 end
 

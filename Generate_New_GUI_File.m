@@ -1,6 +1,6 @@
 function Generate_New_GUI_File(MaxTimeOn, ...
     LookAway, MaxSumOfHabTrial, MinTimeOn, MinSumOfHabTrial, ...
-    StudyName)
+    StudyName, FixedHabituation, FixedHabituationTime)
 foutName = strrep(StudyName, ' ', '');
 foutName = ['Main_Gui_' foutName];
 if (exist([foutName '.m'],'file'))
@@ -24,6 +24,8 @@ s = strrep(s, '%%%MaxSumOfHabTrial%%%', MaxSumOfHabTrial);
 s = strrep(s, '%%%MinSumOfHabTrial%%%', MinSumOfHabTrial);
 s = strrep(s, '%%%MinTimeOn%%%', MinTimeOn);
 s = strrep(s, '%%%StudyName%%%', StudyName);
+s = strrep(s, '%%%FixedHabituation%%%', FixedHabituation);
+s = strrep(s, '%%%FixedHabituationTime%%%', FixedHabituationTime);
 fprintf(fout,'%s\n',s);
 disp(s);
 end

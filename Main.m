@@ -36,7 +36,7 @@ try
         while (exist(fileName,'file'))
             i=i+1;
             fileName = [Dir '/' name '_' sbjNumber '_' int2str(i) '.xls'];
-        end;
+        end
     end
     htmlFileName = strrep(fileName, '.xls', '.html');
 
@@ -44,8 +44,8 @@ try
     StartString = datestr(now);
     fprintf(fid, 'Start: %s\n', StartString);
     fprintf(fid, 'Today: %s\n', expDate);
-    fprintf(fid, 'Subject Name: %s   ', name);
     fprintf(fid, 'Subject Number: %s   ', sbjNumber);
+    fprintf(fid, 'Subject Name: %s   ', name);
     fprintf(fid, 'Birthday: %s   ', birthday);
     fprintf(fid, 'Age: %s   ', age);
     fprintf(fid, 'Subject Sex: %s\n', gender);
