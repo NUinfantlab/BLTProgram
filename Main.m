@@ -90,7 +90,11 @@ try
     Screen('TextSize', win, textSize);
     
     screenFlipInterval = Screen('GetFlipInterval', win);
-    Habituation_Stage;
+    if (fixedHabituation)
+        Habituation_Stage_Fixed;
+    else
+        Habituation_Stage;
+    end
     Test_Stage;
 
     totalData = [habData; testData];
