@@ -127,13 +127,20 @@ try
     fprintf(htmlFid, '<b>Average Observer %% Similarity =</b> %.2f<br/>', averageSIM);
     fprintf(htmlFid, '<b>Overall Cohen''s Kappa =</b> %.2f<br/></p>', averageKappa);
     fprintf(htmlFid, '<p><b>End: </b>%s </p></body>', datestr(now));
+
+    tsvContent = fileread(fileName);
+    csvContent = strrep(tsvContent,'\t',',');
     
+    csvfid = fopen(strrep(fileName, '.xls', '.csv'), 'w+');
+    fprintf(csvfid,'%s',csvContent);
     fclose('all');
     save(strrep(fileName, '.xls', '.mat'));
     
     Screen('CloseAll');
     PsychPortAudio('Close');
     ShowCursor;
+
+    File_Comments_Window(fileName, htmlFileName);
 catch exception
     exception
     
