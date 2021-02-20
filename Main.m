@@ -29,13 +29,13 @@ try
         mkdir(Dir);
     end
     
-    fileName = [Dir '/' name '_' sbjNumber '.xls'];
+    fileName = [Dir '/' sbjNumber '_' name '.xls'];
     if (exist(fileName,'file'))
         i=2;
-        fileName = [Dir '/' name '_' sbjNumber '_' int2str(i) '.xls'];
+        fileName = [Dir '/' sbjNumber '_' name '_' int2str(i) '.xls'];
         while (exist(fileName,'file'))
             i=i+1;
-            fileName = [Dir '/' name '_' sbjNumber '_' int2str(i) '.xls'];
+            fileName = [Dir '/' sbjNumber '_' name '_' int2str(i) '.xls'];
         end
     end
     htmlFileName = strrep(fileName, '.xls', '.html');
@@ -44,8 +44,8 @@ try
     StartString = datestr(now);
     fprintf(fid, 'Start: %s\n', StartString);
     fprintf(fid, 'Today: %s\n', expDate);
-    fprintf(fid, 'Subject Number: %s   ', sbjNumber);
     fprintf(fid, 'Subject Name: %s   ', name);
+    fprintf(fid, 'Subject Number: %s   ', sbjNumber);
     fprintf(fid, 'Birthday: %s   ', birthday);
     fprintf(fid, 'Age: %s   ', age);
     fprintf(fid, 'Subject Sex: %s\n', gender);
@@ -60,7 +60,8 @@ try
     fprintf(fid, 'MaxTimeOn(sec)) = %.2f   ', MaxTimeOn);
     fprintf(fid, 'MaxLookAway(sec) = %.2f   ', LookAway);
     fprintf(fid, 'MinTimeOn(sec) = %.2f   ', MinTimeOn);
-    fprintf(fid, 'Max#HabTrials = %d\n\n', MaxSumOfHabTrial);
+    fprintf(fid, 'Max#HabTrials = %d', MaxSumOfHabTrial);
+    fprintf(fid, 'FixedHabituationTime = %d\n\n', fixedHabituationTime);
 
     htmlFid = fopen(htmlFileName, 'w+');
     fprintf(htmlFid, '<body style="font-size:26px;line-height:1.5"><p><b>Start:</b> %s&nbsp;&nbsp;&nbsp;&nbsp;', StartString);
@@ -81,7 +82,8 @@ try
     fprintf(htmlFid, '<b>MaxTimeOn(sec)) =</b> %.2f&nbsp;&nbsp;&nbsp;', MaxTimeOn);
     fprintf(htmlFid, '<b>MaxLookAway(sec) =</b> %.2f&nbsp;&nbsp;&nbsp;', LookAway);
     fprintf(htmlFid, '<b>MinTimeOn(sec) =</b> %.2f&nbsp;&nbsp;&nbsp;', MinTimeOn);
-    fprintf(htmlFid, '<b>Max#HabTrials =</b> %d<br/></p>', MaxSumOfHabTrial);
+    fprintf(htmlFid, '<b>Max#HabTrials =</b> %d&nbsp;&nbsp;&nbsp;', MaxSumOfHabTrial);
+    fprintf(htmlFid, '<b>FixedHabituationTime =</b> %d<br/></p>', fixedHabituationTime);
 
     HideCursor;
     DrawingParameters;
@@ -129,10 +131,10 @@ try
     fprintf(htmlFid, '<p><b>End: </b>%s </p></body>', datestr(now));
 
     tsvContent = fileread(fileName);
-    csvContent = strrep(tsvContent,'\t',',');
+%     csvContent = strrep(tsvContent,'\t',',');
     
-    csvfid = fopen(strrep(fileName, '.xls', '.csv'), 'w+');
-    fprintf(csvfid,'%s',csvContent);
+    tsvfid = fopen(strrep(fileName, '.xls', '.tsv'), 'w+');
+    fprintf(tsvfid,'%s',tsvContent);
     fclose('all');
     save(strrep(fileName, '.xls', '.mat'));
     

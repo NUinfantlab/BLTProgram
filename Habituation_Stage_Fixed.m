@@ -5,8 +5,8 @@
 fixedHabituationTsvHeaders = '';
 fixedHabituationHtmlHeaders = '';
 if (fixedHabituation)
-    fixedHabituationTsvHeaders = 'Fixed-Trial\tFixed-TIMEON\t';
-    fixedHabituationHtmlHeaders = '<th>Fixed-Trial</th><th>Fixed-TIMEON</th>';
+    fixedHabituationTsvHeaders = 'Fixed-TIMEON\t';
+    fixedHabituationHtmlHeaders = '<th>Fixed-TIMEON</th>';
 end
 fprintf(fid, ['\t', fixedHabituationTsvHeaders, ...
     'HAB-Trial\tCOND\tCRIT\tTIMEON\tSECOND TIMEON\t', ...
@@ -50,8 +50,10 @@ while (~exitHab)
             KAPPA = 0;
         end
         AGR = Compute_Agr(observerTime);
+        % NaN means no looking from either observer
+        % they 100% agree no looking
         if (isnan(AGR))
-            AGR = 0;
+            AGR = 1;
         end
         timeOn = min(sum(observerTime(1,:)), MaxTimeOn);
         timeOn2 = min(sum(observerTime(:,1)), MaxTimeOn);
@@ -197,6 +199,15 @@ while (~exitHab)
         errorResponse = 0;
         errorRespTime = 0;
 
+        % for fixed, wait on f press to start
+        Draw_Hab_Message(win, 'FixedHabReadyScreen', trial, criterion, timeOn, meetCriterion, condition, 4, 0);
+        while (1)
+            [keyIsDown, Secs, keyCode, deltaSecs] = KbCheck(-1);
+            if (keyCode(KbName('F')))
+                break
+            end
+        end
+        
         Draw_Hab_Message(win, 'BeginTrial', trial, criterion, timeOn, meetCriterion, condition, 4, 0);
         trialStart = GetSecs;
         while (1)
@@ -266,7 +277,8 @@ while (~exitHab)
 
             % If fixedHab and the trial time is at the fixedHabTime, stop
             % no matter what
-            if (fixedHabituation && GetSecs - trialStart >= fixedHabituationTime)
+            % .5 added to time to account for human delay
+            if (fixedHabituation && GetSecs - trialStart >= (fixedHabituationTime + .5))
                 SoundAlert;
                 break;
             end
@@ -292,8 +304,8 @@ if ~isempty(habData)
     fixedHabituationTsvColumns = '';
     fixedHabituationHtmlColumns = '';
     if (fixedHabituation)
-        fixedHabituationTsvColumns = '\t\t';
-        fixedHabituationHtmlColumns = '<th></th><th></th>';
+        fixedHabituationTsvColumns = '\t';
+        fixedHabituationHtmlColumns = '<th></th>';
     end
     fprintf(fid, [fixedHabituationTsvColumns, '\tTOTAL\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n'], ...
         condition, criterion, sumData(3), sumData(4), sumData(5), ...

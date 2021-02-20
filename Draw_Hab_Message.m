@@ -172,6 +172,10 @@ function Draw_Hab_Message(win, status, trial, criterion, timeOn, meetCriterion, 
 
             Screen('TextStyle', win, textStyle);
             Screen('TextSize', win, textSize);
+        case 'FixedHabReadyScreen'
+            [x, y] = Screen('DrawText', win, 'Begin Fixed Habituation', originX, y, textColor, bgColor);
+            y = y + sectionSpace;
+            [x, y] = Screen('DrawText', win, 'Press ''f'': Start Trial', originX, y, textColor, bgColor);
     end
     Screen('Flip', win);
 end

@@ -10,8 +10,8 @@ function result = Get_File_Columns(fileType, trialType, meetCriterion, badTrial,
     end
     if (strcmpi(trialType, 'hab'))
         if (nargin >= 4 && isFixedHabituation)
-            fixedHabituationTsvColumns = '%d\t%d\t';
-            fixedHabituationHtmlColumns = '<td>%d</td><td>%d</td>';
+            fixedHabituationTsvColumns = '%d\t';
+            fixedHabituationHtmlColumns = '<td>%d</td>';
         end
         if (strcmpi(fileType, 'html'))
             result = ['<tr bgcolor="%s">', fixedHabituationHtmlColumns, ...
