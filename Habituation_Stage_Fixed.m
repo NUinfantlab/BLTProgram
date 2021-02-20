@@ -55,8 +55,8 @@ while (~exitHab)
         if (isnan(AGR))
             AGR = 1;
         end
-        timeOn = min(sum(observerTime(1,:)), MaxTimeOn);
-        timeOn2 = min(sum(observerTime(:,1)), MaxTimeOn);
+        timeOn = min(sum(observerTime(1,:)), MaxHabTimeOn);
+        timeOn2 = min(sum(observerTime(:,1)), MaxHabTimeOn);
         SIM = Compute_Similarity(timeOn, timeOn2);
         timeOff = sum(observerTime(2,:));
         timeOff2 = sum(observerTime(:,2));
@@ -246,7 +246,7 @@ while (~exitHab)
                     lookAway2 = lookAway2 + 1;
                 end
 
-                if (sum(observerTime(1,:)) >= MaxTimeOn)
+                if (sum(observerTime(1,:)) >= MaxHabTimeOn)
                     SoundAlert;
                     break;
                 end
@@ -261,8 +261,8 @@ while (~exitHab)
                     status = 'FirstLookRecorded';
                 end
             elseif ((preResponse == 2) && (coder1Response == 2))
-                if (startRecording && (Secs - lookAwayStartTime) >= LookAway)
-                    if (sum(observerTime(1,:)) < MinTimeOn)
+                if (startRecording && (Secs - lookAwayStartTime) >= LookAwayHab)
+                    if (sum(observerTime(1,:)) < MinHabTimeOn)
                         observerTime = [0 0; 0 0];
                         startRecording = 0;
                         lookAway1 = 0;
