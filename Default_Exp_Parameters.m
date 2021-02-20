@@ -4,6 +4,7 @@ StudyName = 'Study Name';
 % all times in seconds
 MaxHabTimeOn = 60;
 LookAwayHab = 2;
+FixedHabituationDefault = 0;
 FixedHabituationTimeDefault = 20;
 % Min Time On of First Look
 MinHabTimeOn = 2;
