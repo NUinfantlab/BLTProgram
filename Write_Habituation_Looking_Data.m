@@ -12,11 +12,11 @@ function Write_Habituation_Looking_Data(fid, htmlFid, meetCriterion, badTrial, .
         fprintf(fid, tsvFormat, SN, fixedHabituationTime, ...
             trial, condition, criterion, timeOn, timeOn2, latency, timeOff, timeOff2, lookAway1, lookAway2, AGR, SIM, KAPPA);
         fprintf(htmlFid, htmlFormat, columnBg, fixedHabituationTime, ...
-            trial, condition, criterion, timeOn, timeOn2, latency, timeOff, lookAway1, AGR, SIM, KAPPA);
+            trial, condition, criterion, timeOn, timeOn2, latency, timeOff, lookAway1, AGR);
     else
         fprintf(fid, tsvFormat, ...
             SN, trial, condition, criterion, timeOn, timeOn2, latency, timeOff, timeOff2, lookAway1, lookAway2, AGR, SIM, KAPPA);
         fprintf(htmlFid, htmlFormat, ...
-            columnBg, trial, condition, criterion, timeOn, timeOn2, latency, timeOff, lookAway1, AGR, SIM, KAPPA);
+            columnBg, trial, condition, criterion, timeOn, timeOn2, latency, timeOff, lookAway1, AGR);
     end
     clear tsvFormat htmlFormat columnBg;
