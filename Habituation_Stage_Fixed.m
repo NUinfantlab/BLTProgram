@@ -245,11 +245,12 @@ while (~exitHab)
                 if ((preResponse2 == 1) && (coder2Response == 2))
                     lookAway2 = lookAway2 + 1;
                 end
-
-                if (sum(observerTime(1,:)) >= MaxHabTimeOn)
-                    SoundAlert;
-                    break;
-                end
+%               Fixed trials don't end if timeOn exceeded; only after
+%               fixedHabituationTime has passed
+%                 if (sum(observerTime(1,:)) >= MaxHabTimeOn)
+%                     SoundAlert;
+%                     break;
+%                 end
             end
 
             if ((preResponse == 1) && (coder1Response == 2))
@@ -268,9 +269,11 @@ while (~exitHab)
                         lookAway1 = 0;
                         lookAway2 = 0;
                         status = 'LookTooShort';
-                    else
-                        SoundAlert;
-                        break;
+%                     Fixed habituation trials don't end on short looks; only after
+%                     fixedHabituationTime has passed
+%                     else
+%                         SoundAlert;
+%                         break;
                     end
                 end
             end
