@@ -15,10 +15,12 @@ try
             ~exist('gender', 'var') || ~exist('studyName', 'var') || ...
             ~exist('experimenter', 'var') || ~exist('coder1', 'var') || ...
             ~exist('sbjNumber', 'var') || ~exist('birthday', 'var') || ...
-            ~exist('MaxTimeOn', 'var') || ~exist('LookAway', 'var') || ...
-            ~exist('MaxSumOfHabTrial', 'var') || ~exist('MinTimeOn', 'var') || ...
+            ~exist('MaxHabTimeOn', 'var') || ~exist('LookAwayHab', 'var') || ...
+            ~exist('MaxSumOfHabTrial', 'var') || ~exist('MinHabTimeOn', 'var') || ...
             ~exist('MinSumOfHabTrial', 'var') || ~exist('coder1ResponseKey', 'var') || ...
-            ~exist('coder2ResponseKey', 'var') || ~exist('eventLabels', 'var'))
+            ~exist('coder2ResponseKey', 'var') || ~exist('eventLabels', 'var') || ...
+            ~exist('MaxTestTimeOn', 'var') || ~exist('MinTestTimeOn', 'var') || ...
+            ~exist('MaxSumOfTestTrial', 'var') || ~exist('LookAwayTest', 'var'))
         uiwait(msgbox('Missing Parameters!','Warning','modal'));
         return;
     end
@@ -29,14 +31,14 @@ try
         mkdir(Dir);
     end
     
-    fileName = [Dir '/' name '_' sbjNumber '.xls'];
+    fileName = [Dir '/' sbjNumber '_' name '.xls'];
     if (exist(fileName,'file'))
         i=2;
-        fileName = [Dir '/' name '_' sbjNumber '_' int2str(i) '.xls'];
+        fileName = [Dir '/' sbjNumber '_' name '_' int2str(i) '.xls'];
         while (exist(fileName,'file'))
             i=i+1;
-            fileName = [Dir '/' name '_' sbjNumber '_' int2str(i) '.xls'];
-        end;
+            fileName = [Dir '/' sbjNumber '_' name '_' int2str(i) '.xls'];
+        end
     end
     htmlFileName = strrep(fileName, '.xls', '.html');
 
@@ -57,10 +59,15 @@ try
     for i = 1:numel(eventLabels)
         fprintf(fid, 'Test %d: %s   ', i, eventLabels{i});
     end
-    fprintf(fid, 'MaxTimeOn(sec)) = %.2f   ', MaxTimeOn);
-    fprintf(fid, 'MaxLookAway(sec) = %.2f   ', LookAway);
-    fprintf(fid, 'MinTimeOn(sec) = %.2f   ', MinTimeOn);
-    fprintf(fid, 'Max#HabTrials = %d\n\n', MaxSumOfHabTrial);
+    fprintf(fid, 'MaxHabTimeOn(sec)) = %.2f   ', MaxHabTimeOn);
+    fprintf(fid, 'MaxLookAwayHab(sec) = %.2f   ', LookAwayHab);
+    fprintf(fid, 'MinHabTimeOn(sec) = %.2f   ', MinHabTimeOn);
+    fprintf(fid, 'Max#HabTrials = %d   ', MaxSumOfHabTrial);
+    fprintf(fid, 'MaxTestTimeOn(sec)) = %.2f   ', MaxTestTimeOn);
+    fprintf(fid, 'MaxLookAwayTest(sec) = %.2f   ', LookAwayTest);
+    fprintf(fid, 'MinTestTimeOn(sec) = %.2f   ', MinTestTimeOn);
+    fprintf(fid, 'Max#TestTrials = %d   ', MaxSumOfTestTrial);
+    fprintf(fid, 'FixedHabituationTime = %d\n\n', fixedHabituationTime);
 
     htmlFid = fopen(htmlFileName, 'w+');
     fprintf(htmlFid, '<body style="font-size:26px;line-height:1.5"><p><b>Start:</b> %s&nbsp;&nbsp;&nbsp;&nbsp;', StartString);
@@ -78,10 +85,15 @@ try
     for i = 1:numel(eventLabels)
         fprintf(htmlFid, '<b>Test %d:</b> %s&nbsp;&nbsp;&nbsp;', i, eventLabels{i});
     end
-    fprintf(htmlFid, '<b>MaxTimeOn(sec)) =</b> %.2f&nbsp;&nbsp;&nbsp;', MaxTimeOn);
-    fprintf(htmlFid, '<b>MaxLookAway(sec) =</b> %.2f&nbsp;&nbsp;&nbsp;', LookAway);
-    fprintf(htmlFid, '<b>MinTimeOn(sec) =</b> %.2f&nbsp;&nbsp;&nbsp;', MinTimeOn);
-    fprintf(htmlFid, '<b>Max#HabTrials =</b> %d<br/></p>', MaxSumOfHabTrial);
+    fprintf(htmlFid, '<b>MaxHabTimeOn(sec)) =</b> %.2f&nbsp;&nbsp;&nbsp;', MaxHabTimeOn);
+    fprintf(htmlFid, '<b>MaxLookAwayHab(sec) =</b> %.2f&nbsp;&nbsp;&nbsp;', LookAwayHab);
+    fprintf(htmlFid, '<b>MinHabTimeOn(sec) =</b> %.2f&nbsp;&nbsp;&nbsp;', MinHabTimeOn);
+    fprintf(htmlFid, '<b>Max#HabTrials =</b> %d&nbsp;&nbsp;&nbsp;', MaxSumOfHabTrial);
+    fprintf(htmlFid, '<b>MaxTestTimeOn(sec)) =</b> %.2f&nbsp;&nbsp;&nbsp;', MaxTestTimeOn);
+    fprintf(htmlFid, '<b>MaxLookAwayTest(sec) =</b> %.2f&nbsp;&nbsp;&nbsp;', LookAwayTest);
+    fprintf(htmlFid, '<b>MinTestTimeOn(sec) =</b> %.2f&nbsp;&nbsp;&nbsp;', MinTestTimeOn);
+    fprintf(htmlFid, '<b>Max#TestTrials =</b> %d&nbsp;&nbsp;&nbsp;', MaxSumOfTestTrial);
+    fprintf(htmlFid, '<b>FixedHabituationTime =</b> %d<br/></p>', fixedHabituationTime);
 
     HideCursor;
     DrawingParameters;
@@ -90,7 +102,11 @@ try
     Screen('TextSize', win, textSize);
     
     screenFlipInterval = Screen('GetFlipInterval', win);
-    Habituation_Stage;
+    if (fixedHabituation)
+        Habituation_Stage_Fixed;
+    else
+        Habituation_Stage;
+    end
     Test_Stage;
 
     totalData = [habData; testData];
@@ -123,13 +139,19 @@ try
     fprintf(htmlFid, '<b>Average Observer %% Similarity =</b> %.2f<br/>', averageSIM);
     fprintf(htmlFid, '<b>Overall Cohen''s Kappa =</b> %.2f<br/></p>', averageKappa);
     fprintf(htmlFid, '<p><b>End: </b>%s </p></body>', datestr(now));
+
+    tsvContent = fileread(fileName);
     
+    tsvfid = fopen(strrep(fileName, '.xls', '.tsv'), 'w+');
+    fprintf(tsvfid,'%s',tsvContent);
     fclose('all');
     save(strrep(fileName, '.xls', '.mat'));
     
     Screen('CloseAll');
     PsychPortAudio('Close');
     ShowCursor;
+
+    File_Comments_Window(fileName, htmlFileName);
 catch exception
     exception
     

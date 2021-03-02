@@ -7,7 +7,7 @@ fprintf(htmlFid, ...
         ['<table border="1" style="border-collapse:collapse; font-size:24px" width="1400"><tr>' ...
          '<th>HAB-Trial</th><th>COND</th><th>CRIT</th><th>TIMEON</th>' ...
          '<th>SECOND TIMEON</th><th>LATENCY</th><th>TIMEOFF</th>' ...
-         '<th>#OFF</th><th>%%AGR</th><th>%%SIM</th><th>KAPPA</th></tr>']);
+         '<th>#OFF</th><th>%%AGR</th></tr>']);
 
 habData = []; %Trial, criterion, TimeOn, 2nd TimeOn, latency, TimeOff, 2nd TimeOff, # Off, 2nd # Off, AGR, SIM, KAPPA
 exitHab = 0;
@@ -36,8 +36,8 @@ while (~exitHab)
     else
         KAPPA = Compute_Kappa(observerTime);
         AGR = Compute_Agr(observerTime);
-        timeOn = min(sum(observerTime(1,:)), MaxTimeOn);
-        timeOn2 = min(sum(observerTime(:,1)), MaxTimeOn);
+        timeOn = min(sum(observerTime(1,:)), MaxHabTimeOn);
+        timeOn2 = min(sum(observerTime(:,1)), MaxHabTimeOn);
         SIM = Compute_Similarity(timeOn, timeOn2);
         timeOff = sum(observerTime(2,:));
         timeOff2 = sum(observerTime(:,2));
@@ -264,7 +264,7 @@ while (~exitHab)
                     lookAway2 = lookAway2 + 1;
                 end
 
-                if (sum(observerTime(1,:)) >= MaxTimeOn)
+                if (sum(observerTime(1,:)) >= MaxHabTimeOn)
                     SoundAlert;
                     break;
                 end
@@ -279,8 +279,8 @@ while (~exitHab)
                     status = 'FirstLookRecorded';
                 end
             elseif ((preResponse == 2) && (coder1Response == 2))
-                if (startRecording && (Secs - lookAwayStartTime) >= LookAway)
-                    if (sum(observerTime(1,:)) < MinTimeOn)
+                if (startRecording && (Secs - lookAwayStartTime) >= LookAwayHab)
+                    if (sum(observerTime(1,:)) < MinHabTimeOn)
                         observerTime = [0 0; 0 0];
                         startRecording = 0;
                         lookAway1 = 0;
@@ -321,13 +321,13 @@ if ~isempty(habData)
     fprintf(htmlFid, ...
         ['<tr><td>TOTAL</td><td>%s</td><td>%.2f</td><td>%.2f</td><td>%.2f</td>' ...
          '<td>%.2f</td><td>%.2f</td><td>%.2f</td>' ...
-         '<td></td><td></td><td></td></tr>'], ...
+         '<td></td></tr>'], ...
         condition, criterion, sumData(3), sumData(4), sumData(5), ...
         sumData(6), sumData(8));
     fprintf(htmlFid, ...
         ['<tr><td>MEAN</td><td>%s</td><td>%.2f</td><td>%.2f</td><td>%.2f</td>' ...
          '<td>%.2f</td><td>%.2f</td><td>%.2f</td>' ...
-         '<td></td><td></td><td></td></tr></table><br/>'], ...
+         '<td></td></tr></table><br/>'], ...
         condition, criterion, meanData(3), meanData(4), meanData(5), ...
         meanData(6), meanData(8));
 else

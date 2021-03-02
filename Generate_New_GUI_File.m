@@ -1,6 +1,7 @@
-function Generate_New_GUI_File(MaxTimeOn, ...
-    LookAway, MaxSumOfHabTrial, MinTimeOn, MinSumOfHabTrial, ...
-    StudyName)
+function Generate_New_GUI_File(MaxTimeOnHab, ...
+    LookAwayHab, MaxSumOfHabTrial, MinTimeOnHab, MinSumOfHabTrial, ...
+    StudyName, FixedHabituation, FixedHabituationTime, MaxTimeOnTest, ...
+    LookAwayTest, MaxSumOfTestTrial, MinTimeOnTest)
 foutName = strrep(StudyName, ' ', '');
 foutName = ['Main_Gui_' foutName];
 if (exist([foutName '.m'],'file'))
@@ -18,12 +19,21 @@ fout = fopen([foutName '.m'], 'W+');
 
 while ~feof(fin)
 s = fgetl(fin);
-s = strrep(s, '%%%MaxTimeOn%%%', MaxTimeOn);
-s = strrep(s, '%%%LookAway%%%', LookAway);
-s = strrep(s, '%%%MaxSumOfHabTrial%%%', MaxSumOfHabTrial);
-s = strrep(s, '%%%MinSumOfHabTrial%%%', MinSumOfHabTrial);
-s = strrep(s, '%%%MinTimeOn%%%', MinTimeOn);
 s = strrep(s, '%%%StudyName%%%', StudyName);
+s = strrep(s, '%%%FixedHabituation%%%', FixedHabituation);
+s = strrep(s, '%%%FixedHabituationTime%%%', FixedHabituationTime);
+s = strrep(s, '%%%MinSumOfHabTrial%%%', MinSumOfHabTrial);
+
+s = strrep(s, '%%%MaxSumOfHabTrial%%%', MaxSumOfHabTrial);
+s = strrep(s, '%%%MinHabTimeOn%%%', MinTimeOnHab);
+s = strrep(s, '%%%MaxHabTimeOn%%%', MaxTimeOnHab);
+s = strrep(s, '%%%LookAwayHab%%%', LookAwayHab);
+
+s = strrep(s, '%%%MaxSumOfTestTrial%%%', MaxSumOfTestTrial);
+s = strrep(s, '%%%MinTestTimeOn%%%', MinTimeOnTest);
+s = strrep(s, '%%%MaxTestTimeOn%%%', MaxTimeOnTest);
+s = strrep(s, '%%%LookAwayTest%%%', LookAwayTest);
+
 fprintf(fout,'%s\n',s);
 disp(s);
 end

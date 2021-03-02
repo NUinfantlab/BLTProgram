@@ -2,7 +2,9 @@
 
 This program handles tracking looking times for infant lab experiments.
 
-It uses the Psychtoolbox Package to display screens.
+It uses the Psychtoolbox Package to display screens. If you see an error because "Screen" (or similar)
+is unknown, you should install Psychtoolbox. [Go to their downloads page](http://psychtoolbox.org/download)
+and follow their instructions for installing on your OS (probably Mac but I don't judge).
 
 # How to run
 
