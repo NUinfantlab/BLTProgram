@@ -10,6 +10,7 @@ function Test_Type_Window_Submitted(name, ...
 
     eventLabels = {};
     emptyFlag = 0;
+    cleanup = onCleanup(@()cleanupPTB());
     for e = 1:numel(eventInputs)
         eventLabels{e} = get(eventInputs{e}, 'String');
         if(isempty(eventLabels{e}))
@@ -23,4 +24,11 @@ function Test_Type_Window_Submitted(name, ...
         close(win);
         Main;
     end
+end
+
+function cleanupPTB()
+    fclose('all');
+    Screen('CloseAll');
+    PsychPortAudio('Close');
+    ShowCursor;
 end
