@@ -224,9 +224,10 @@ while (~exitHab)
                 errorResponse = 0;
                 errorRespTime = errorRespTime + deltaSecs;
                 if (errorRespTime >= 1)
-                    PsychPortAudio('Start', soundHandle, 1, inf, 0);
-                    PsychPortAudio('RescheduleStart', soundHandle, 0, 0);
-                    PsychPortAudio('Stop', soundHandle, 1);
+                    % as of 2021/04, removing beeping on error key presses
+                    % PsychPortAudio('Start', soundHandle, 1, inf, 0);
+                    % PsychPortAudio('RescheduleStart', soundHandle, 0, 0);
+                    % PsychPortAudio('Stop', soundHandle, 1);
                     errorRespTime = 0;
                 end
             else
